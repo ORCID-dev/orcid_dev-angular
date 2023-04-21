@@ -78,6 +78,7 @@ jobs:
     with:
       artifact_name: sandbox
       version_tag: ${{ inputs.version_tag }}
+      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
 
   bld_qa:
@@ -91,6 +92,7 @@ jobs:
     with:
       artifact_name: qa
       version_tag: ${{ inputs.version_tag }}
+      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
 
   bld_int:
@@ -104,5 +106,6 @@ jobs:
     with:
       artifact_name: int
       version_tag: ${{ inputs.version_tag }}
+      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
 
