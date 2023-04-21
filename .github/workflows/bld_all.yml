@@ -1,5 +1,7 @@
 name: bld_all
 
+#NOTE: this deploys assets as well as builds
+
 permissions:
   checks: write
   contents: read
