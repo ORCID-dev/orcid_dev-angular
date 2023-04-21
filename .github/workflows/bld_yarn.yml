@@ -14,21 +14,6 @@ on:
         required: false
         default: "prod"
         type: string
-      git_checkout:
-        description: 'branch or tag to checkout for building'
-        required: false
-        default: "main"
-        type: string
-      version_tag:
-        description: 'Name of the tag to build'
-        required: false
-        default: "v2.0.1"
-        type: string
-      bump:
-        description: 'whether to bump the version number by a major minor patch amount or none'
-        required: false
-        default: "gitlog"
-        type: string
 
   workflow_dispatch:
     inputs:
@@ -37,27 +22,6 @@ on:
         required: false
         default: "prod"
         type: string
-      git_checkout:
-        description: 'branch or tag to checkout for building'
-        required: false
-        default: "main"
-        type: string
-      version_tag:
-        description: 'Name of the tag to build'
-        required: false
-        default: "v2.0.1"
-        type: string
-      bump:
-        description: |
-          How to optionally bump the semver version ( Major.Minor.Patch ) : gitlog = git log will be searched for
-          '#major #minor #patch'
-        required: false
-        options:
-        - gitlog
-        - patch
-        - minor
-        - major
-        type: choice
 
 jobs:
   bld_yarn:
