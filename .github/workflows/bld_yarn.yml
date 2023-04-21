@@ -12,7 +12,7 @@ on:
       artifact_name:
         description: 'Name of the artifact env'
         required: false
-        default: "prod"
+        default: 'prod'
         type: string
 
   workflow_dispatch:
@@ -20,7 +20,7 @@ on:
       artifact_name:
         description: 'Name of the artifact env'
         required: false
-        default: "prod"
+        default: 'prod'
         type: string
 
 jobs:
@@ -34,4 +34,3 @@ jobs:
           cache: 'yarn'
       - run: yarn
       - run: yarn build:${{ inputs.artifact_name }}
-
