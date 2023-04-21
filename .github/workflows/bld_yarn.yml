@@ -1,0 +1,73 @@
+name: bld_yarn
+run-name: bld-{{ inputs.artifact_name }}
+
+permissions:
+  checks: write
+  contents: read
+  issues: read
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        description: 'Name of the artifact env'
+        required: false
+        default: "prod"
+        type: string
+      git_checkout:
+        description: 'branch or tag to checkout for building'
+        required: false
+        default: "main"
+        type: string
+      version_tag:
+        description: 'Name of the tag to build'
+        required: false
+        default: "v2.0.1"
+        type: string
+      bump:
+        description: 'whether to bump the version number by a major minor patch amount or none'
+        required: false
+        default: "gitlog"
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      artifact_name:
+        description: 'Name of the artifact env'
+        required: false
+        default: "prod"
+        type: string
+      git_checkout:
+        description: 'branch or tag to checkout for building'
+        required: false
+        default: "main"
+        type: string
+      version_tag:
+        description: 'Name of the tag to build'
+        required: false
+        default: "v2.0.1"
+        type: string
+      bump:
+        description: |
+          How to optionally bump the semver version ( Major.Minor.Patch ) : gitlog = git log will be searched for
+          '#major #minor #patch'
+        required: false
+        options:
+        - gitlog
+        - patch
+        - minor
+        - major
+        type: choice
+
+jobs:
+  bld_yarn:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'v16.13.2'
+          cache: 'yarn'
+      - run: yarn
+      - run: yarn build:${{ artifact_name }}
+
