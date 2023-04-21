@@ -12,18 +12,45 @@ on:
       version_tag:
         description: 'version tag to use'
         required: false
-        default: 'next_tag'
+        default: "latest"
+        type: string
+      git_checkout:
+        description: 'branch or tag to checkout for building'
+        required: false
+        default: "main"
+        type: string
+      bump:
+        description: 'whether to bump the version number by a major minor patch amount or try gitlog'
+        required: false
+        default: "gitlog"
         type: string
 
   workflow_dispatch:
     inputs:
       version_tag:
-        description: 'version tag to use'
+        description: 'Version tag to use:'
         required: false
-        default: 'next_tag'
+        default: "latest"
         type: string
+      git_checkout:
+        description: 'Branch or tag to checkout for building:'
+        required: false
+        default: "main"
+        type: string
+      bump:
+        description: |
+          How to optionally bump the semver version ( Major.Minor.Patch ) : gitlog = git log will be searched for
+          '#major #minor #patch'
+        required: false
+        options:
+        - gitlog
+        - patch
+        - minor
+        - major
+        type: choice
 
 jobs:
+
   bld_prod:
     uses: ./.github/workflows/bld_maven.yml
     secrets: inherit # pass all secrets
@@ -35,6 +62,8 @@ jobs:
     with:
       artifact_name: prod
       version_tag: ${{ inputs.version_tag }}
+      git_checkout: ${{ inputs.git_checkout }}
+      bump: ${{ inputs.bump }}
 
   bld_sandbox:
     uses: ./.github/workflows/bld_maven.yml
@@ -47,6 +76,7 @@ jobs:
     with:
       artifact_name: sandbox
       version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
 
   bld_qa:
     uses: ./.github/workflows/bld_maven.yml
@@ -59,6 +89,7 @@ jobs:
     with:
       artifact_name: qa
       version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
 
   bld_int:
     uses: ./.github/workflows/bld_maven.yml
@@ -71,3 +102,5 @@ jobs:
     with:
       artifact_name: int
       version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
+
