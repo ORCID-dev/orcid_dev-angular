@@ -69,5 +69,5 @@ jobs:
           node-version: 'v16.13.2'
           cache: 'yarn'
       - run: yarn
-      - run: yarn build:${{ artifact_name }}
+      - run: yarn build:${{ inputs.artifact_name }}
 
