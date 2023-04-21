@@ -15,7 +15,5 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   lint:
     uses: ./.github/workflows/lint.yml
-
