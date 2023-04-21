@@ -18,7 +18,7 @@ on:
       git_checkout:
         description: 'branch or tag to checkout for building'
         required: false
-        default: "main"
+        default: "development"
         type: string
       version_tag:
         description: 'Name of the tag to build'
@@ -41,7 +41,7 @@ on:
       git_checkout:
         description: 'branch or tag to checkout for building'
         required: false
-        default: "main"
+        default: "development"
         type: string
       version_tag:
         description: 'Name of the tag to build'
