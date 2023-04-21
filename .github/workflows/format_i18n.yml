@@ -5,7 +5,7 @@ on:
 name: format_i18n
 
 jobs:
-  format_prettier:
+  format_i18n:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
