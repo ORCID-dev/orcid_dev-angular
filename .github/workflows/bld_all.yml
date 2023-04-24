@@ -12,43 +12,33 @@ on:
   workflow_call:
     inputs:
       version_tag:
-        description: 'version tag to use'
+        description: 'Version tag to use: (bump must also be set to none to keep a specific version'
         required: false
         default: 'latest'
         type: string
-      git_checkout:
-        description: 'branch or tag to checkout for building'
-        required: false
-        default: 'development'
-        type: string
       bump:
-        description: 'whether to bump the version number by a major minor patch amount or try gitlog'
+        description: 'whether to bump the version number by a major minor patch'
         required: false
-        default: 'gitlog'
+        default: 'patch'
         type: string
 
   workflow_dispatch:
     inputs:
       version_tag:
-        description: 'Version tag to use:'
+        description: 'Version tag to use: (bump must also be set to none to keep a specific version'
         required: false
         default: 'latest'
         type: string
-      git_checkout:
-        description: 'Branch or tag to checkout for building:'
-        required: false
-        default: 'development'
-        type: string
       bump:
         description: |
-          How to optionally bump the semver version ( Major.Minor.Patch ) : gitlog = git log will be searched for
-          '#major #minor #patch'
+          How to optionally bump the semver version ( Major.Minor.Patch ) : git log will be searched for
+          '#major #minor #patch' or feat/ or fix/ branch names to optionally override the bump. Set to none to keep a specific version
         required: false
         options:
-          - gitlog
           - patch
           - minor
           - major
+          - none
         type: choice
 
 jobs:
@@ -63,7 +53,6 @@ jobs:
     with:
       artifact_name: prod
       version_tag: ${{ inputs.version_tag }}
-      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
 
   bld_sandbox:
@@ -77,7 +66,6 @@ jobs:
     with:
       artifact_name: sandbox
       version_tag: ${{ inputs.version_tag }}
-      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
 
   bld_qa:
@@ -91,7 +79,6 @@ jobs:
     with:
       artifact_name: qa
       version_tag: ${{ inputs.version_tag }}
-      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
 
   bld_int:
@@ -105,5 +92,4 @@ jobs:
     with:
       artifact_name: int
       version_tag: ${{ inputs.version_tag }}
-      git_checkout: ${{ inputs.git_checkout }}
       bump: ${{ inputs.bump }}
