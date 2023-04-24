@@ -98,7 +98,8 @@ for build_env in $build_envs;do
   echo_log "for build progress see $build_log_file"
 
   # set the version tag to be -${build_env}-${tag_numeric}
-  mvn versions:set -DnewVersion="${tag_numeric}" -DgenerateBackupPoms=false --activate-profiles ${build_env} -Dnodejs.workingDirectory=. -l $build_log_file --settings settings-custom-deploy.xml
+  # NOTE: version bumping only works when prod profile is used!
+  mvn versions:set -DnewVersion="${tag_numeric}" -DgenerateBackupPoms=false --activate-profiles prod -Dnodejs.workingDirectory=. -l $build_log_file --settings settings-custom-deploy.xml
 
   # NOTE: deploy stage performs build as well as deploy
   mvnd --batch-mode \

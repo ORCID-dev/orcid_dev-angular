@@ -87,7 +87,9 @@ for build_env in $build_envs;do
   echo_log "log file: $build_log_file"
 
   # set the version tag to be -${build_env}-${tag_numeric}
-  mvn versions:set -DnewVersion="${tag_numeric}" -DgenerateBackupPoms=false --activate-profiles ${build_env} -Dnodejs.workingDirectory=. --settings settings-custom.xml -l $build_log_file
+  # NOTE: version bumping only works when prod profile is used!
+  mvn versions:set -DnewVersion="${tag_numeric}" -DgenerateBackupPoms=false --activate-profiles prod -Dnodejs.workingDirectory=. --settings settings-custom.xml -l $build_log_file
+  grep version pom.xml | head -1
 
   # perform the build
   mvnd install --activate-profiles ${build_env} -Dnodejs.workingDirectory=. -DskipTest -l $build_log_file --settings settings-custom.xml
