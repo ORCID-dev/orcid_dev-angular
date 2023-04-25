@@ -1,3 +1,10 @@
+## v2.32.2 - 2023-04-25
+[Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.32.1...v2.32.2)
+
+ - [#9](https://github.com/ORCID-dev/orcid_dev-angular/pull/9): feat/blar4
+ - [#8](https://github.com/ORCID-dev/orcid_dev-angular/pull/8): feat/blar3
+ - [#7](https://github.com/ORCID-dev/orcid_dev-angular/pull/7): feat/blar2
+
 ## v2.32.1 - 2023-04-25
 
 [Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.32.0...v2.32.1)
