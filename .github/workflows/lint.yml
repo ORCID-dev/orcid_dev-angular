@@ -24,7 +24,7 @@ jobs:
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> "$GITHUB_ENV"
       - uses: actions/cache@v3
         with:
-          path: ~/.cache/pre-commit
+          path: ~/.cache
           key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
       # lockdown all 3rd party repos to git shas
       #- uses: cloudposse/github-action-pre-commit@32acf3179b9eda817c0f549e8057477d320827db
