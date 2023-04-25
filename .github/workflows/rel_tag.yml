@@ -52,6 +52,13 @@ jobs:
           # NOTE: history does not include tags!
           fetch-depth: 100
 
+      - name: git pull to include any pipeline made changes and fetch all tags
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git pull
+          git fetch --all
+
       - name: find next version
         id: version
         uses: ORCID/version-bump-action@main
