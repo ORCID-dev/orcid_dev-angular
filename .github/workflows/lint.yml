@@ -28,5 +28,5 @@ jobs:
           key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
       # lockdown all 3rd party repos to git shas
       #- uses: cloudposse/github-action-pre-commit@32acf3179b9eda817c0f549e8057477d320827db
+      # migrate to standard pre-commit
       - uses: pre-commit/action@5f528da5c95691c4cf42ff76a4d10854b62cbb82
-      - run: find ~/
