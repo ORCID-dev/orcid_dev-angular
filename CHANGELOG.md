@@ -1,8 +1,9 @@
 ## v2.32.0 - 2023-04-25
+
 [Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.31.0...v2.32.0)
 
- - [#5](https://github.com/ORCID-dev/orcid_dev-angular/pull/5): Feat/fake pret
- - [#4](https://github.com/ORCID-dev/orcid_dev-angular/pull/4): feat/fake-prettier-formatter-card-to-trigger-github-actions
+- [#5](https://github.com/ORCID-dev/orcid_dev-angular/pull/5): Feat/fake pret
+- [#4](https://github.com/ORCID-dev/orcid_dev-angular/pull/4): feat/fake-prettier-formatter-card-to-trigger-github-actions
 
 ## v2.31.0 - 2023-04-24
 
