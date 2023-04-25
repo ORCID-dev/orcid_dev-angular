@@ -1,3 +1,8 @@
+## v2.32.1 - 2023-04-25
+[Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.32.0...v2.32.1)
+
+ - [#6](https://github.com/ORCID-dev/orcid_dev-angular/pull/6): feat/test
+
 ## v2.32.0 - 2023-04-25
 
 [Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.31.0...v2.32.0)
