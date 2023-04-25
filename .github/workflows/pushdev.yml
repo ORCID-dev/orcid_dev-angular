@@ -1,9 +1,9 @@
-name: pushmain
+name: pushdev
 
 on:
   push:
     branches:
-      - main
+      - development
     # Ignore changes that are made as part of the rel_tag workflow to avoid infinite loop
     paths-ignore:
       - CHANGELOG.md
