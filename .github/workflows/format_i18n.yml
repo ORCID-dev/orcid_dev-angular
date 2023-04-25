@@ -17,6 +17,6 @@ jobs:
       - run: yarn build:i18n:generate-testing
       - uses: EndBug/add-and-commit@c8bfb4ff65642c4c54445500822f6e7da558994a
         with:
-          message: '🤖 GITHUB ACTIONS'
+          message: '🤖 GITHUB ACTIONS i18n generator'
         env:
           GITHUB_TOKEN: ${{ secrets.ORCID_RELEASER }}
