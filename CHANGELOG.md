@@ -1,7 +1,8 @@
 ## v2.32.3 - 2023-05-03
+
 [Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.32.2...v2.32.3)
 
- - [#10](https://github.com/ORCID-dev/orcid_dev-angular/pull/10): feat/wibblers
+- [#10](https://github.com/ORCID-dev/orcid_dev-angular/pull/10): feat/wibblers
 
 ## v2.32.2 - 2023-04-25
 
