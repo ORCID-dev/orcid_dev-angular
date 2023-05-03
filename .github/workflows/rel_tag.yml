@@ -19,6 +19,11 @@ on:
         required: false
         default: "patch"
         type: string
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
 
   workflow_dispatch:
     inputs:
@@ -38,27 +43,44 @@ on:
           - major
           - none
         type: choice
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
+
+
+
 
 jobs:
   rel_tag:
     runs-on: ubuntu-latest
     steps:
+      - name: git-checkout-ref-action
+        id: ref
+        uses: ORCID-dev/git-checkout-ref-action@main
+        with:
+          default_branch: ${{ github.event.repository.default_branch }}
+          inputs: ${{ inputs.ref }}
+
+
       - uses: actions/checkout@v3
         with:
           # token with write permissions to protected branches
           # standard github token does not allow this
           token: ${{ secrets.RELEASE_TOKEN }}
+          ref: ${{ steps.ref.outputs.ref }}
           # checkout some history so we can build a changelog and release
           # NOTE: history does not include tags!
           fetch-depth: 100
 
-      - name: git pull to include any pipeline made changes and fetch all tags
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@users.noreply.github.com"
-          git pull
-          git fetch --all
-
+#       - name: git pull to include any pipeline made changes and fetch all tags
+#         run: |
+#           git config --global user.name "github-actions"
+#           git config --global user.email "github-actions@users.noreply.github.com"
+#           git pull
+#           git fetch --all
+# 
       - name: find next version
         id: version
         uses: ORCID-dev/version-bump-action@main
@@ -66,11 +88,11 @@ jobs:
           version_tag: ${{ inputs.version_tag }}
           bump: ${{ inputs.bump }}
 
-      - name: tag repo create changelog and create release
-        uses: ORCID/changelog-action@main
-        with:
-          version_tag: ${{ steps.version.outputs.version_tag }}
-          slack_channel: keyevent-dev
-          github_write_token: ${{ secrets.RELEASE_TOKEN }}
-          slacktee_token: ${{ secrets.SLACKTEE_TOKEN }}
-
+#       - name: tag repo create changelog and create release
+#         uses: ORCID/changelog-action@main
+#         with:
+#           version_tag: ${{ steps.version.outputs.version_tag }}
+#           slack_channel: keyevent-dev
+#           github_write_token: ${{ secrets.RELEASE_TOKEN }}
+#           slacktee_token: ${{ secrets.SLACKTEE_TOKEN }}
+# 
