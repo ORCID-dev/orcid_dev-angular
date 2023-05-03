@@ -61,7 +61,7 @@ jobs:
         uses: ORCID-dev/git-checkout-ref-action@main
         with:
           default_branch: ${{ github.event.repository.default_branch }}
-          inputs: ${{ inputs.ref }}
+          ref: ${{ inputs.ref }}
 
 
       - uses: actions/checkout@v3
