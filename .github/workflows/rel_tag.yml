@@ -66,11 +66,11 @@ jobs:
           version_tag: ${{ inputs.version_tag }}
           bump: ${{ inputs.bump }}
 
-#       - name: tag repo create changelog and create release
-#         uses: ORCID/changelog-action@main
-#         with:
-#           version_tag: ${{ steps.version.outputs.version_tag }}
-#           slack_channel: keyevent-dev
-#           github_write_token: ${{ secrets.RELEASE_TOKEN }}
-#           slacktee_token: ${{ secrets.SLACKTEE_TOKEN }}
-# 
+      - name: tag repo create changelog and create release
+        uses: ORCID/changelog-action@main
+        with:
+          version_tag: ${{ steps.version.outputs.version_tag }}
+          slack_channel: keyevent-dev
+          github_write_token: ${{ secrets.RELEASE_TOKEN }}
+          slacktee_token: ${{ secrets.SLACKTEE_TOKEN }}
+

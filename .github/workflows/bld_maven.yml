@@ -55,6 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          # checkout some history so we can scan commits for bump messages
+          # NOTE: history does not include tags!
+          fetch-depth: 100
 
       - name: git pull to include any pipeline made changes
         run: |
