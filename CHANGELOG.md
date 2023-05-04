@@ -1,7 +1,8 @@
 ## v2.33.2 - 2023-05-04
+
 [Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.33.1...v2.33.2)
 
- - [#15](https://github.com/ORCID-dev/orcid_dev-angular/pull/15): fix/gha-dummy-67
+- [#15](https://github.com/ORCID-dev/orcid_dev-angular/pull/15): fix/gha-dummy-67
 
 ## v2.33.1 - 2023-05-04
 
