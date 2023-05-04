@@ -66,6 +66,7 @@ jobs:
       artifact_name: prod
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
 
   bld_sandbox:
     uses: ./.github/workflows/bld_maven.yml
@@ -79,6 +80,7 @@ jobs:
       artifact_name: sandbox
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
 
   bld_qa:
     uses: ./.github/workflows/bld_maven.yml
@@ -92,6 +94,7 @@ jobs:
       artifact_name: qa
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
 
   bld_int:
     uses: ./.github/workflows/bld_maven.yml
@@ -105,3 +108,4 @@ jobs:
       artifact_name: int
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
+      ref: ${{ inputs.ref }}
