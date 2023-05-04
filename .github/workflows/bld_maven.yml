@@ -25,6 +25,11 @@ on:
         required: false
         default: 'patch'
         type: string
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
 
   workflow_dispatch:
     inputs:
@@ -49,22 +54,29 @@ on:
           - major
           - none
         type: choice
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
 
 jobs:
   bld_maven:
     runs-on: ubuntu-latest
     steps:
+      - name: git-checkout-ref-action
+        id: ref
+        uses: ORCID-dev/git-checkout-ref-action@main
+        with:
+          default_branch: ${{ github.event.repository.default_branch }}
+          ref: ${{ inputs.ref }}
+
       - uses: actions/checkout@v3
         with:
+          ref: ${{ steps.ref.outputs.ref }}
           # checkout some history so we can scan commits for bump messages
           # NOTE: history does not include tags!
           fetch-depth: 100
-
-      - name: git pull to include any pipeline made changes
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@users.noreply.github.com"
-          git pull
 
       - name: find next version
         id: version
