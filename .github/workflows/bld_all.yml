@@ -21,6 +21,11 @@ on:
         required: false
         default: 'patch'
         type: string
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
 
   workflow_dispatch:
     inputs:
@@ -40,6 +45,13 @@ on:
           - major
           - none
         type: choice
+      ref:
+        description: 'git reference to use with the checkout use default_branch to have that calculated'
+        required: false
+        default: "default"
+        type: string
+
+
 
 jobs:
   bld_prod:
