@@ -1,3 +1,12 @@
+## v2.33.4 - 2023-05-05
+[Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.33.3...v2.33.4)
+
+- [#17](https://github.com/ORCID-dev/orcid_dev-angular/pull/17): fix/gha-dummy-68
+
+### Fix
+
+-  use correct token for formatting jobs
+
 ## v2.33.3 - 2023-05-04
 
 [Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.33.2...v2.33.3)
