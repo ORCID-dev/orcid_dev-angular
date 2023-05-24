@@ -1,0 +1,25 @@
+name: pr_completed
+
+# this is a privileged workflow that can run with secrets
+# to perform actions on work carried out in the pull_request workflow
+
+on:
+  workflow_run:
+    workflows:
+      - pr
+    types:
+      - completed
+
+  workflow_call:
+
+  workflow_dispatch:
+
+jobs:
+  format_i18n:
+    uses: ./.github/workflows/format_i18n.yml
+    secrets: inherit # pass all secrets for pushing
+
+  format_prettier:
+    uses: ./.github/workflows/format_prettier.yml
+    secrets: inherit # pass all secrets for pushing
+
