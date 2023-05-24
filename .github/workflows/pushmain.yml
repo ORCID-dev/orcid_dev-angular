@@ -19,11 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_test_release_tag:
-    uses: ./.github/workflows/build_test_release_tag.yml
+  format_prettier:
+    uses: ./.github/workflows/format_prettier.yml
     secrets: inherit # pass all secrets for pushing
-    with:
-      # NOTE: passing in a specific branch means that commits made during the pipeline before the final build is completed will be included
-      #       the default is to always checkout the current commit that runs the pipeline in each job
-      ref: main
 
