@@ -22,4 +22,8 @@ jobs:
   format_prettier:
     uses: ./.github/workflows/format_prettier.yml
     secrets: inherit # pass all secrets for pushing
+  unit_tests:
+    uses: ./.github/workflows/unit_tests.yml
+    needs:
+      - format_prettier
 
