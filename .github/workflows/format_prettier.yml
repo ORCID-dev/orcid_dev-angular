@@ -37,6 +37,6 @@ jobs:
       - name: fail our run if commit is done so the second run is used
         run: |
             if ${{ steps.add_and_commit.outputs.committed }};then
-              exit 1
+              exit 222
             fi
 
