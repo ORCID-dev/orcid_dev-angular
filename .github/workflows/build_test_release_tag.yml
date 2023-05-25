@@ -50,20 +50,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  format_i18n:
+    uses: ./.github/workflows/format_i18n.yml
+    secrets: inherit # pass all secrets for pushing
+
+  format_prettier:
+    uses: ./.github/workflows/format_prettier.yml
+    secrets: inherit # pass all secrets for pushing
+
+##############################################################################
 
   lint:
     uses: ./.github/workflows/lint.yml
+    needs:
+      - format_i18n
+      - format_prettier
 
   unit_tests:
     uses: ./.github/workflows/unit_tests.yml
     needs:
-      - lint
+      - format_i18n
+      - format_prettier
 
   # this is a test
   bld_all_yarn:
     uses: ./.github/workflows/bld_all_yarn.yml
     needs:
-      - lint
+      - format_i18n
+      - format_prettier
 
 ##############################################################################
   bld_all:
@@ -72,6 +86,8 @@ jobs:
     needs:
       - lint
       - bld_all_yarn
+      - format_i18n
+      - format_prettier
     permissions:
       checks: write
       contents: read
@@ -83,6 +99,7 @@ jobs:
       ref: ${{ inputs.ref }}
 
 ##############################################################################
+
   rel_tag:
     uses: ./.github/workflows/rel_tag.yml
     needs: bld_all
@@ -96,4 +113,3 @@ jobs:
       contents: write
       issues: read
       pull-requests: write
-

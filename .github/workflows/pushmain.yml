@@ -13,17 +13,18 @@ on:
     tags-ignore:
       - '**'
 
-# cancel running job if another commit comes in
+# if multiple prs get merged they will wait for each job to complete
+# so we don't get duplicate builds
 concurrency:
   group: pushmain-${{ github.ref }}-1
   cancel-in-progress: false
 
 jobs:
-  format_prettier:
-    uses: ./.github/workflows/format_prettier.yml
+  build_test_release_tag:
+    uses: ./.github/workflows/build_test_release_tag.yml
     secrets: inherit # pass all secrets for pushing
-  unit_tests:
-    uses: ./.github/workflows/unit_tests.yml
-    needs:
-      - format_prettier
+    with:
+      # NOTE: passing in a specific branch means that commits made during the pipeline before the final build is completed will be included
+      #       the default is to always checkout the current commit that runs the pipeline in each job
+      ref: main
 
