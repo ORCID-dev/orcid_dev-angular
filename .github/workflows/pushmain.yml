@@ -16,7 +16,7 @@ on:
 # cancel running job if another commit comes in
 concurrency:
   group: pushmain-${{ github.ref }}-1
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   format_prettier:
