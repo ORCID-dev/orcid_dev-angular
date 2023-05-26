@@ -35,4 +35,5 @@ jobs:
             if ${{ steps.add_and_commit.outputs.committed }};then
               gh run cancel ${{ github.run_id }}
             fi
-
+        env:
+          GH_TOKEN: ${{ github.token }}
