@@ -1,6 +1,10 @@
-## v2.33.6 - 2023-05-26
-[Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.33.5...v2.33.6)
+## v2.33.7 - 2023-05-26
+[Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.33.6...v2.33.7)
 
+
+## v2.33.6 - 2023-05-26
+
+[Full Changelog](https://github.com/ORCID-dev/orcid_dev-angular/compare/v2.33.5...v2.33.6)
 
 ## v2.33.5 - 2023-05-23
 
