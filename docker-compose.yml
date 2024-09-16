@@ -1,22 +1,16 @@
-version: '2.1'
+version: '2'
 services:
-  proxy:
-    image: abiosoft/caddy
-    container_name: proxy
-    volumes:
-      - ./Caddyfile:/etc/Caddyfile
-      - ./.caddy:/root/.caddy
-    environment:
-      - ACME_AGREE=true
-    ports:
-      - 80:80
-    restart: always
-    links:
-      - web
-    depends_on:
-      - web
-  web:
+  angular:
+    image: ${DOCKER_REG_PRIVATE}/orcid/orcid-angular:${TAG:-0.0.1}
+    entrypoint: sleep infinity
     build:
+      cache_from:
+        - orcid/registry-dependencies:${TAG:-0.0.1}
       context: .
       dockerfile: Dockerfile
-    restart: always
+      args:
+        build_env: ${BUILD_ENV:-prod}
+    ports:
+      - 0.0.0.0:13005:8080
+
+
