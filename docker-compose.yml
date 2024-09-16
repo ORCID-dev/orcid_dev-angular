@@ -2,7 +2,7 @@ version: '2'
 services:
   angular:
     image: ${DOCKER_REG_PRIVATE}/orcid/orcid-angular:${TAG:-0.0.1}
-    entrypoint: sleep infinity
+    #entrypoint: sleep infinity
     build:
       cache_from:
         - orcid/registry-dependencies:${TAG:-0.0.1}
