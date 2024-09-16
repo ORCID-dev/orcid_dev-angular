@@ -53,4 +53,4 @@ jobs:
       context: .
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
-
+      build_args: "build_env=prod"

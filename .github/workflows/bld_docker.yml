@@ -20,6 +20,11 @@ on:
         required: false
         default: "."
         type: string
+      build_args:
+        description: 'arguments'
+        required: false
+        default: ""
+        type: string
       version_tag:
         description: 'Name of the tag to build'
         required: false
@@ -48,6 +53,11 @@ on:
         description: 'Name of the context in the repo'
         required: false
         default: "."
+        type: string
+      build_args:
+        description: 'arguments'
+        required: false
+        default: ""
         type: string
       version_tag:
         description: 'Name of the tag to build'
@@ -115,4 +125,5 @@ jobs:
           context: ${{ inputs.context }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args: ${{ inputs.build_args }}
 
