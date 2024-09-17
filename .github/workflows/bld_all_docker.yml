@@ -49,8 +49,37 @@ jobs:
     uses: ./.github/workflows/bld_docker.yml
     secrets: inherit # pass all secrets
     with:
-      docker_name: orcid/orcid-angular-prod
+      docker_name: orcid/registry/orcid-web-frontend-prod
       context: .
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       build_args: "build_env=prod"
+  bld_angular_sandbox:
+    uses: ./.github/workflows/bld_docker.yml
+    secrets: inherit # pass all secrets
+    with:
+      docker_name: orcid/registry/orcid-web-frontend-sandbox
+      context: .
+      version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
+      build_args: "build_env=sandbox"
+  bld_angular_qa:
+    uses: ./.github/workflows/bld_docker.yml
+    secrets: inherit # pass all secrets
+    with:
+      docker_name: orcid/registry/orcid-web-frontend-qa
+      context: .
+      version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
+      build_args: "build_env=qa"
+  bld_angular_int:
+    uses: ./.github/workflows/bld_docker.yml
+    secrets: inherit # pass all secrets
+    with:
+      docker_name: orcid/registry/orcid-web-frontend-int
+      context: .
+      version_tag: ${{ inputs.version_tag }}
+      bump: ${{ inputs.bump }}
+      build_args: "build_env=int"
+
+
