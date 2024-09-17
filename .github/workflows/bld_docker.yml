@@ -25,6 +25,11 @@ on:
         required: false
         default: ""
         type: string
+      file:
+        description: 'specify a custom dockerfile'
+        required: false
+        default: ""
+        type: string
       version_tag:
         description: 'Name of the tag to build'
         required: false
@@ -41,7 +46,6 @@ on:
         default: "default"
         type: string
 
-
   workflow_dispatch:
     inputs:
       docker_name:
@@ -56,6 +60,11 @@ on:
         type: string
       build_args:
         description: 'arguments'
+        required: false
+        default: ""
+        type: string
+      file:
+        description: 'specify a custom dockerfile'
         required: false
         default: ""
         type: string
@@ -118,6 +127,16 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: nasty hack to allow dynamic defaults
+        id: dynamic_defaults
+        run: |
+          FILE="${{ github.event.inputs.file }}"
+          echo "default_file=${FILE:-${{ inputs.context }}/Dockerfile}" >> "$GITHUB_OUTPUT"
+
+      - name: show the dynamic defaults
+        run: |
+          echo ${{ steps.dynamic_defaults.outputs.default_file }}
+
       - uses: docker/build-push-action@v3
         with:
           push: true
@@ -126,4 +145,5 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           build-args: ${{ inputs.build_args }}
+          file: ${{ steps.dynamic_defaults.outputs.default_file }}
 
