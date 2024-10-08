@@ -54,7 +54,7 @@ jobs:
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       build_args: "build_env=prod"
-      file: Dockerfile_build
+      file: Dockerfile.build
   bld_angular_sandbox:
     uses: ./.github/workflows/bld_docker.yml
     secrets: inherit # pass all secrets
@@ -64,7 +64,7 @@ jobs:
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       build_args: "build_env=sandbox"
-      file: Dockerfile_build
+      file: Dockerfile.build
   bld_angular_qa:
     uses: ./.github/workflows/bld_docker.yml
     secrets: inherit # pass all secrets
@@ -74,7 +74,7 @@ jobs:
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       build_args: "build_env=qa"
-      file: Dockerfile_build
+      file: Dockerfile.build
   bld_angular_int:
     uses: ./.github/workflows/bld_docker.yml
     secrets: inherit # pass all secrets
@@ -84,6 +84,6 @@ jobs:
       version_tag: ${{ inputs.version_tag }}
       bump: ${{ inputs.bump }}
       build_args: "build_env=int"
-      file: Dockerfile_build
+      file: Dockerfile.build
 
 
