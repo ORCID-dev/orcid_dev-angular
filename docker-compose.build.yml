@@ -1,14 +1,12 @@
 version: '2'
 services:
   angular:
-    image: ${DOCKER_REG_PRIVATE}/orcid/orcid-angular:${TAG:-0.0.1}
+    image: ${DOCKER_REG_PRIVATE}/orcid/registry/orcid-web-frontend-${BUILD_ENV:-local}:${TAG:-0.0.1}
     #entrypoint: sleep infinity
     build:
-      cache_from:
-        - orcid/registry-dependencies:${TAG:-0.0.1}
       context: .
       dockerfile: Dockerfile.build
       args:
-        build_env: ${BUILD_ENV:-prod}
+        build_env: ${BUILD_ENV:-local}
     ports:
-      - 0.0.0.0:13005:8080
+      - 0.0.0.0:13105:8080
