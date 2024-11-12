@@ -3,4 +3,5 @@ java temurin-11.0.15+10
 maven 3.6.3
 mvnd 0.9.0
 awscli 2.9.15
-tx 1.6.7 https://github.com/ORCID/asdf-transifex.git
+# RUN asdf plugin add tx https://github.com/ORCID/asdf-transifex.git
+tx 1.6.7
