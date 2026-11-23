@@ -1,0 +1,61 @@
+name: ui-docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/orcid-ui-docs/**'
+      - 'projects/orcid-ui/**'
+      - 'projects/orcid-tokens/**'
+      - package.json
+      - angular.json
+      - .github/workflows/ui-docs.yml
+  pull_request:
+    paths:
+      - 'projects/orcid-ui-docs/**'
+      - 'projects/orcid-ui/**'
+      - 'projects/orcid-tokens/**'
+      - package.json
+      - angular.json
+      - .github/workflows/ui-docs.yml
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ui-docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # PR previews go to runway/pr-<number>; forks get no preview.
+  build:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: build
+      node-version-file: .nvmrc
+      upload: site
+      run: |
+        base="/${GITHUB_REPOSITORY#*/}/"
+        if [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+          pr=${GITHUB_REF#refs/pull/}
+          base="${base}runway/pr-${pr%/merge}/"
+        fi
+        yarn build:ui-docs --base-href "$base"
+        dir=dist/orcid-ui-docs/browser
+        [ -d "$dir" ] || dir=dist/orcid-ui-docs
+        cp "$dir/index.html" "$dir/404.html"
+        rm -rf site
+        cp -R "$dir" site
+
+  publish:
+    needs: build
+    permissions:
+      contents: write
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/pages.yml@v1
+    with:
+      artifact: build
+      directory: ${{ github.event_name == 'pull_request' && format('runway/pr-{0}', github.event.pull_request.number) || '.' }}
+      keep: runway

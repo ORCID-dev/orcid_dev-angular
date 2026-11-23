@@ -1,50 +1,54 @@
 name: pr
 
-# Nothing in this chain asks for more than a fork pull request is granted, and
-# no job in it is given a secret.
-#
-# On a `pull_request` whose head is a fork, GitHub caps the run at read-only.
-# Requesting `contents: write` on a reusable-workflow call (`uses:`) exceeds that
-# ceiling, and for `uses:` jobs GitHub validates the request when the run is
-# created rather than capping it, which can fail the whole workflow with
-# startup_failure. That would leave every required check stuck on "Expected"
-# with no red X to explain it.
-permissions:
-  contents: read
-
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+  merge_group:
 
-  workflow_call:
+permissions: {}
 
-  workflow_dispatch:
-
-# cancel running job if another commit comes in
 concurrency:
-  group: pr-${{ github.ref }}-1
+  group: pr-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # Produces the required `lint / pre-commit` context. It lives here rather than
-  # in a push-triggered workflow so it also reports on pull requests from a fork,
-  # whose pushes fire in the fork and never reach this repository's check runs.
   lint:
-    uses: ./.github/workflows/lint.yml
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/lint.yml@v1
 
   test_yarn:
-    uses: ./.github/workflows/test_yarn.yml
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: test_yarn
+      node-version-file: .nvmrc
+      build-cache: .angular/cache
+      build-cache-key: ng-build
+      run: |
+        yarn test:scripts
+        yarn typecheck:scripts
+        yarn test-headless:ci
 
-  # Prettier gate, check-only: an unformatted PR fails here and its author runs
-  # `yarn format`. Must be a required status check; see
-  # .github/workflows/format.yml.
   format:
-    uses: ./.github/workflows/format.yml
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: format
+      node-version-file: .nvmrc
+      run: yarn format:check
 
-  # Full production build: the only place the postbuild layout is exercised.
   bld_yarn:
-    uses: ./.github/workflows/bld_yarn.yml
-#   NOTE: codeql is only available on public repos or enterprise github accounts
-#   codeql:
-#     uses: ./.github/workflows/codeql.yml
-#
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: bld_yarn
+      node-version-file: .nvmrc
+      build-cache: .angular/cache
+      build-cache-key: ng-build
+      run: |
+        yarn build
+        yarn build:manifest:check
+        yarn build:verify
