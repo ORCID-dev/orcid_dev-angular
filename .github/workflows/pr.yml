@@ -16,12 +16,12 @@ jobs:
       contents: read
     uses: ORCID-dev/public-reusable-workflows/.github/workflows/lint.yml@v1
 
-  test_yarn:
+  test:
     permissions:
       contents: read
     uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
     with:
-      name: test_yarn
+      name: test
       node-version-file: .nvmrc
       build-cache: .angular/cache
       build-cache-key: ng-build
@@ -39,12 +39,12 @@ jobs:
       node-version-file: .nvmrc
       run: yarn format:check
 
-  bld_yarn:
+  build:
     permissions:
       contents: read
     uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
     with:
-      name: bld_yarn
+      name: build
       node-version-file: .nvmrc
       build-cache: .angular/cache
       build-cache-key: ng-build
@@ -52,3 +52,11 @@ jobs:
         yarn build
         yarn build:manifest:check
         yarn build:verify
+
+  ok:
+    if: always()
+    needs: [lint, test, format, build]
+    permissions: {}
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/gate.yml@v1
+    with:
+      needs: ${{ toJSON(needs) }}
