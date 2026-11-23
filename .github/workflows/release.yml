@@ -1,0 +1,135 @@
+name: release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: [CHANGELOG.md, '.github/**']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Explicit version. Empty bumps the latest tag.
+        type: string
+        default: ''
+      bump:
+        description: Used when version is empty.
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+      release:
+        description: Tag the commit and create a GitHub Release.
+        type: boolean
+        default: true
+      docker:
+        description: Also build and push the frontend images.
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  version:
+    # Mirrors set RELEASE_ON_PUSH=false and release by dispatch only.
+    if: github.event_name == 'workflow_dispatch' || vars.RELEASE_ON_PUSH == 'true'
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/version.yml@v1
+    with:
+      version: ${{ inputs.version }}
+      bump: ${{ inputs.bump || 'patch' }}
+
+  # Also the single writer of the yarn, node_modules, Maven and Angular build caches.
+  bld_mvn:
+    needs: version
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: bld_mvn
+      java-version: '11'
+      node-version-file: .nvmrc
+      cache: save
+      build-cache: .angular/cache
+      build-cache-key: ng-build
+      version: ${{ needs.version.outputs.version }}
+      run: |
+        mvn -T 1C org.codehaus.mojo:versions-maven-plugin:2.25.2:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false -Pprod
+        yarn build
+        yarn build:manifest:check
+        yarn build:verify
+        mvn -T 1C -Pprod -Dnodejs.workingDirectory=. -Dskip.installyarn=true -Dskip.yarn=true -Dmaven.test.skip package
+        for artifact in orcid-web-frontend-prod orcid-web-frontend-sandbox orcid-web-frontend-qa orcid-web-frontend-int; do
+          mvn deploy:deploy-file --settings settings-deploy.xml -DrepositoryId=github -Durl="$ARTIFACT_URL$ARTIFACT_REPO_PATH" \
+            -DgroupId=org.orcid -DartifactId="$artifact" -Dversion="$VERSION" -Dpackaging=war -Dfile=target/orcid-web-frontend-prod.war
+        done
+    secrets:
+      env-vars: |
+        ARTIFACT_URL=${{ secrets.ARTIFACT_URL }}
+        ARTIFACT_REPO_PATH=${{ secrets.ARTIFACT_REPO_PATH }}
+        ARTIFACT_USER=${{ secrets.ARTIFACT_USER }}
+        ARTIFACT_PASSWORD=${{ secrets.ARTIFACT_PASSWORD }}
+
+  i18n_source:
+    needs: version
+    if: github.event_name == 'push'
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
+    with:
+      name: i18n_source
+      node-version-file: .nvmrc
+      upload: src/locale/messages.xlf
+      run: |
+        yarn build-runtime-env
+        yarn build:i18n
+
+  push_i18n_source:
+    needs: i18n_source
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/transifex.yml@v1
+    with:
+      mode: push
+      resource: orcid-angular.messages-xlf
+      artifact: i18n_source
+      artifact-path: src/locale
+    secrets:
+      transifex-token: ${{ secrets.TRANSIFEX_TOKEN }}
+
+  bld_docker:
+    needs: version
+    if: inputs.docker
+    permissions:
+      contents: read
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/docker.yml@v1
+    with:
+      name: bld_docker
+      images: >-
+        [{"name": "orcid/registry/orcid-web-frontend-prod", "file": "Dockerfile.build.yarn", "build-args": "build_env=prod"},
+        {"name": "orcid/registry/orcid-web-frontend-sandbox", "file": "Dockerfile.build.yarn", "build-args": "build_env=sandbox"},
+        {"name": "orcid/registry/orcid-web-frontend-qa", "file": "Dockerfile.build.yarn", "build-args": "build_env=qa"},
+        {"name": "orcid/registry/orcid-web-frontend-int", "file": "Dockerfile.build.yarn", "build-args": "build_env=int"}]
+      version: ${{ needs.version.outputs.version }}
+      push: true
+    secrets:
+      registry: ${{ secrets.DOCKER_REGISTRY }}
+      username: ${{ secrets.DOCKER_USER }}
+      password: ${{ secrets.DOCKER_PASSWORD }}
+
+  release:
+    needs: [version, bld_mvn, bld_docker]
+    if: >-
+      !cancelled() && needs.version.result == 'success' && needs.bld_mvn.result == 'success' &&
+      needs.bld_docker.result != 'failure' && (github.event_name == 'push' || inputs.release)
+    permissions:
+      contents: write
+    uses: ORCID-dev/public-reusable-workflows/.github/workflows/release.yml@v1
+    with:
+      tag: ${{ needs.version.outputs.tag }}
+      previous-tag: ${{ needs.version.outputs.last-tag }}
+      slack-channel: tech-release
+    secrets:
+      slack-token: ${{ secrets.SLACKTEE_TOKEN }}
