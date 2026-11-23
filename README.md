@@ -7,8 +7,8 @@
 <h1 align="center">ORCID Angular Frontend</h1>
 
 <p align="center">
-	<a href="https://github.com/ORCID/orcid-angular/actions/workflows/bld_test_rel_tag.yml">
-		<img src="https://github.com/ORCID/orcid-angular/actions/workflows/bld_test_rel_tag.yml/badge.svg" alt="bld_test_rel_tag status">
+	<a href="https://github.com/ORCID/orcid-angular/actions/workflows/release.yml">
+		<img src="https://github.com/ORCID/orcid-angular/actions/workflows/release.yml/badge.svg" alt="release status">
 	</a>
 </p>
 

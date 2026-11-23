@@ -3,7 +3,7 @@ name: release
 on:
   push:
     branches: [main]
-    paths-ignore: [CHANGELOG.md, '.github/**']
+    paths-ignore: ['**.md', '.github/**']
   workflow_dispatch:
     inputs:
       version:
@@ -42,13 +42,13 @@ jobs:
       bump: ${{ inputs.bump || 'patch' }}
 
   # Also the single writer of the yarn, node_modules, Maven and Angular build caches.
-  bld_mvn:
+  deploy:
     needs: version
     permissions:
       contents: read
     uses: ORCID-dev/public-reusable-workflows/.github/workflows/build.yml@v1
     with:
-      name: bld_mvn
+      name: deploy
       java-version: '11'
       node-version-file: .nvmrc
       cache: save
@@ -99,14 +99,14 @@ jobs:
     secrets:
       transifex-token: ${{ secrets.TRANSIFEX_TOKEN }}
 
-  bld_docker:
+  images:
     needs: version
     if: inputs.docker
     permissions:
       contents: read
     uses: ORCID-dev/public-reusable-workflows/.github/workflows/docker.yml@v1
     with:
-      name: bld_docker
+      name: images
       images: >-
         [{"name": "orcid/registry/orcid-web-frontend-prod", "file": "Dockerfile.build.yarn", "build-args": "build_env=prod"},
         {"name": "orcid/registry/orcid-web-frontend-sandbox", "file": "Dockerfile.build.yarn", "build-args": "build_env=sandbox"},
@@ -120,10 +120,10 @@ jobs:
       password: ${{ secrets.DOCKER_PASSWORD }}
 
   release:
-    needs: [version, bld_mvn, bld_docker]
+    needs: [version, deploy, images]
     if: >-
-      !cancelled() && needs.version.result == 'success' && needs.bld_mvn.result == 'success' &&
-      needs.bld_docker.result != 'failure' && (github.event_name == 'push' || inputs.release)
+      !cancelled() && needs.version.result == 'success' && needs.deploy.result == 'success' &&
+      needs.images.result != 'failure' && (github.event_name == 'push' || inputs.release)
     permissions:
       contents: write
     uses: ORCID-dev/public-reusable-workflows/.github/workflows/release.yml@v1

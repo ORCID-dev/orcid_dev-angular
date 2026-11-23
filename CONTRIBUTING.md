@@ -9,14 +9,14 @@ Branch naming, for people with write access to this repository, is
 `<your-name>/<TICKET-ID>`, for example `lmendoa/PD-1234`. A pre-commit hook
 enforces it. Contributors working from a fork can name their branch anything.
 
-Four checks must pass before a pull request can merge:
+One check, `ok / gate`, must pass before a pull request can merge. It turns green when these four jobs do:
 
-| Check                   | What it does                                                                                                                                                                                            |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `lint / pre-commit`     | Runs [pre-commit](https://pre-commit.com/): YAML validity, no oversized files, shebangs on executables, and **actionlint** over `.github/workflows/`. This is the only thing that lints workflow files. |
-| `format / format`       | Checks that every file Prettier covers is formatted. It never changes your branch; see below.                                                                                                           |
-| `test_yarn / test_yarn` | Unit tests for the app and the five sibling projects under `projects/`, plus the postbuild characterization tests.                                                                                      |
-| `bld_yarn / bld_yarn`   | A full production build of all 21 locales, then checks that the emitted layout is still routable by the deployed nginx and Tomcat rules.                                                                |
+| Job                 | What it does                                                                                                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lint / pre-commit` | Runs [pre-commit](https://pre-commit.com/): YAML validity, no oversized files, shebangs on executables, and **actionlint** over `.github/workflows/`. This is the only thing that lints workflow files. |
+| `format / format`   | Checks that every file Prettier covers is formatted. It never changes your branch; see below.                                                                                                           |
+| `test / test`       | Unit tests for the app and the five sibling projects under `projects/`, plus the postbuild characterization tests.                                                                                      |
+| `build / build`     | A full production build of all 21 locales, then checks that the emitted layout is still routable by the deployed nginx and Tomcat rules.                                                                |
 
 ## Formatting
 
